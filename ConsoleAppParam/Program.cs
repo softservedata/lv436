@@ -6,8 +6,49 @@ using System.Threading.Tasks;
 
 namespace ConsoleAppParam
 {
+    public class MyType
+    {
+        private int amount;
+        public int Amount { get { return amount; } set { amount = value; } }
+        //
+        //private string message;
+        public string Message { get; set; }
+
+        public MyType(int amount, string message)
+        {
+            Amount = amount;
+            Message = message;
+        }
+    }
+
     public class Program
     {
+        public delegate double Action(double x);
+        public delegate double Action2(double x, double y);
+        public double Sqr(double x)
+        {
+            return x * x;
+        }
+
+        public double SqrP1(double x)
+        {
+            return x * x + 10;
+        }
+
+        private double Work(Action f, double x)
+        {
+            Console.WriteLine("Work running");
+            return f(x) + 1;
+        }
+
+        public double Work2(Action2 f, double x, double y)
+        {
+            Console.WriteLine("Work2 running");
+            return f(x, y);
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
         public void work1(int i)
         {
             i = i + 1;
@@ -103,6 +144,45 @@ namespace ConsoleAppParam
             //Console.WriteLine("main(), after s = " + s);
             //Console.WriteLine("main(), after s0 = " + s0);
             //
+            // By Name
+            //Action sqr1 = appl.Sqr;
+            //Action sqr1 = new Action(appl.Sqr);
+            //Console.WriteLine("Run Work(Sqr2, 10): " + appl.Work(sqr1, 10));
+            //Console.WriteLine("Run Work(Sqr2, 10): " + appl.Work(appl.SqrP1, 10));
+            //
+            // Use Lambda
+            //Action sqr2 = x => x * x; // Anonimous Method
+            //Console.WriteLine("Run Work(Sqr2, 10): " + appl.Work(sqr2, 10));
+            //Console.WriteLine("Run Work(Lambda, 10): " + appl.Work(x => x * x, 10));
+            //Console.WriteLine("Run Work(Lambda, 10): " + appl.Work(x => { x++; return x * x; }, 10));
+            //
+            //Console.WriteLine("Run Work2(Lambda, 8, 9): " + appl.Work2((x, y) => { x++; y++; return x * y; }, 8, 9));
+            //
+            // Class MyType
+            //MyType m = new MyType(108, "Hello");
+            //Console.WriteLine("m.Amount= " + m.Amount + "  m.Message= " + m.Message);
+            // Anonimous Class
+            //var v = new { Amount = 108, Message = "Hello" };
+            //Console.WriteLine("v.Amount= " + v.Amount + "  v.Message= " + v.Message);
+            //
+            // Linq
+            string[] greetings = { "hello world", "hello LINQ", "hello C# LINQ" };
+            //var items = from s in greetings where s.EndsWith("LINQ") select s;
+            //foreach (var item in items)
+            //foreach (var item in greetings)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            //
+            int id = 0;
+            var items = greetings
+                            .Where(c => c.EndsWith("LINQ"))
+                            .Select(c => new { Id = ++id, Str = c });
+            foreach (var item in items)
+            {
+                //Console.WriteLine("id= " + item.Id.ToString() + "  str= " + item.Str);
+                Console.WriteLine("id= " + item.Id + "  str= " + item.Str);
+            }
         }
     }
 }
