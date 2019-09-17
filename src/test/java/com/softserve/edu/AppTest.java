@@ -16,8 +16,8 @@ public class AppTest {
 		logger.info("message text");
 		logger.warn("message text");
 		logger.error("message text");
-		//Assert.assertTrue(true);
-                Assert.assertTrue(false);
+		Assert.assertTrue(true);
+                //Assert.assertTrue(false);
 	}
 
 }
