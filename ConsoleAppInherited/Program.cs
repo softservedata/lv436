@@ -78,120 +78,226 @@ namespace ConsoleAppInherited
     }
         */
 
-    public class ClassA
+    /*
+public class ClassA
+{
+    public int i = 1;
+    public virtual int J { get; set; }
+    //
+    //private int j;
+    //public int J {
+    //    get { return j; }
+    //    set { j = value; }
+    //}
+
+    public ClassA()
     {
-        public int i = 1;
-        public virtual int J { get; set; }
+        J = 11;
+        Console.WriteLine("\t\tConstructor A() DONE, J = " + J);
+    }
+
+    public virtual void m1()
+    {
+        Console.WriteLine("ClassA, metod m1, i={0}", i);
+    }
+    public void m2()
+    {
+        Console.WriteLine("ClassA, metod m2, i={0} J={1}", i, J);
+    }
+    public void m3()
+    {
+        Console.Write("ClassA, metod m3, runnind m4(): ");
+        m4();
+        m5();
+    }
+    public virtual void m4()
+    {
+        Console.WriteLine("ClassA, metod m4");
+    }
+
+    //private void m5()
+    protected virtual void m5()
+    {
+        Console.WriteLine("ClassA, PRIVATE metod m5");
+    }
+
+}
+
+public class ClassB : ClassA
+{
+    public new double i = 1.1;
+    public override int J { get; set; }
+
+    public ClassB() //:base()
+    {
+        J = 22;
+        Console.WriteLine("\t\tConstructor B() DONE, J = " + J);
+    }
+
+    public override void m1()
+    {
+        //Console.WriteLine("Running m1 from class A:");
+        //base.m1();
         //
-        //private int j;
-        //public int J {
-        //    get { return j; }
-        //    set { j = value; }
-        //}
-            
-        public ClassA()
+        Console.WriteLine("ClassB, metod m1, i={0}", i);
+    }
+    public new void m2()
+    {
+        Console.WriteLine("ClassB, metod m2, i={0}", i);
+    }
+    public override void m4()
+    {
+        Console.WriteLine("ClassB, metod m4");
+        m5();
+    }
+
+    public void m6()
+    {
+        Console.WriteLine("ClassB, metod m6");
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("The Start.");
+        //- - - - - - - - - - - - -
+        //ClassA a;
+        //a = new ClassA();
+        //Console.WriteLine("Test ClassA.");
+        //a.m1();
+        //a.m2();
+        //a.m3();
+        //a.m4();
+        //a.m5(); // ERROR
+        //- - - - - - - - - - - - -
+        ClassA b;
+        b = new ClassB();       // 1. Polymorphism, declare parent, create child
+        Console.WriteLine("Test ClassB.");
+        b.m1();                 // 2. Polymorphism, run form object if m1() virtual
+        b.m2();                 // form A
+        b.m3();                 // 3. Polymorphism, m3 run m4 from B
+        b.m4();
+        //b.m5(); //ERROR
+        //b.m6(); //ERROR
+        ((ClassB)b).m6(); // Code Smell
+        //- - - - - - - - - - - - -
+        //ClassB b0;
+        //b0 = new ClassB();
+        //Console.WriteLine("Test_0 ClassB.");
+        //b0.m1();
+        //b0.m2();
+        //b0.m3();
+        //b0.m4();
+        //b0.m6();
+        //- - - - - - - - - - - - -
+        Console.WriteLine("The End.");
+    }
+}
+    */
+
+    public class A
+    {
+        private int i = 11;
+
+        public A()
         {
-            J = 11;
-            Console.WriteLine("\t\tConstructor A() DONE, J = " + J);
+            this.i = 11;
+            Console.WriteLine("public A() DONE");
         }
 
-        public virtual void m1()
+        public A(int i)
         {
-            Console.WriteLine("ClassA, metod m1, i={0}", i);
-        }
-        public void m2()
-        {
-            Console.WriteLine("ClassA, metod m2, i={0} J={1}", i, J);
-        }
-        public void m3()
-        {
-            Console.Write("ClassA, metod m3, runnind m4(): ");
-            m4();
-            m5();
-        }
-        public virtual void m4()
-        {
-            Console.WriteLine("ClassA, metod m4");
+            this.i = i;
+            Console.WriteLine("public A(int i) DONE");
         }
 
-        //private void m5()
-        protected virtual void m5()
+        public int GetI()
         {
-            Console.WriteLine("ClassA, PRIVATE metod m5");
+            return i;
+        }
+
+        public void test()
+        {
+            Console.WriteLine("\tclass A: public test()");
+        }
+
+        public virtual void work()
+        {
+            test();
+            Console.WriteLine("class A: public work()");
+        }
+
+        public virtual void info()
+        {
+            Console.WriteLine("class A: public info()");
+            message();
+        }
+
+        protected virtual void message()
+        {
+            Console.WriteLine("class A: message info()");
         }
 
     }
 
-    public class ClassB : ClassA
+    public class B : A
     {
-        public new double i = 1.1;
-        public override int J { get; set; }
+        private int j = 22;
 
-        public ClassB() //:base()
+        public B() //: base()
         {
-            J = 22;
-            Console.WriteLine("\t\tConstructor B() DONE, J = " + J);
-        }
-
-        public override void m1()
-        {
-            //Console.WriteLine("Running m1 from class A:");
-            //base.m1();
-            //
-            Console.WriteLine("ClassB, metod m1, i={0}", i);
-        }
-        public new void m2()
-        {
-            Console.WriteLine("ClassB, metod m2, i={0}", i);
-        }
-        public override void m4()
-        {
-            Console.WriteLine("ClassB, metod m4");
-            m5();
+            this.j = 22;
+            Console.WriteLine("public B() DONE");
         }
 
-        public void m6()
+        //public B(int j) // ERROR
+        public B(int i, int j) : base(i)
         {
-            Console.WriteLine("ClassB, metod m6");
+            this.j = j;
+            Console.WriteLine("public B(int i, int j) DONE");
         }
+
+        public int GetJ()
+        {
+            return j;
+        }
+
+        private new void test() // Architecture Error
+        {
+            Console.WriteLine("\tclass B: private test()");
+        }
+
+        public override void work()
+        {
+            test(); // Run from Class B
+            Console.WriteLine("class B: public work()");
+        }
+
+        //protected override void info() // ERROR
+        //{
+        //    Console.WriteLine("class B: public info()");
+        //}
+
+        protected override void message()
+        {
+            Console.WriteLine("class B: message info()");
+        }
+
     }
 
     public class Program
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("The Start.");
-            //- - - - - - - - - - - - -
-            //ClassA a;
-            //a = new ClassA();
-            //Console.WriteLine("Test ClassA.");
-            //a.m1();
-            //a.m2();
-            //a.m3();
-            //a.m4();
-            //a.m5(); // ERROR
-            //- - - - - - - - - - - - -
-            ClassA b;
-            b = new ClassB();       // 1. Polymorphism, declare parent, create child
-            Console.WriteLine("Test ClassB.");
-            b.m1();                 // 2. Polymorphism, run form object if m1() virtual
-            b.m2();                 // form A
-            b.m3();                 // 3. Polymorphism, m3 run m4 from B
-            b.m4();
-            //b.m5(); //ERROR
-            //b.m6(); //ERROR
-            ((ClassB)b).m6(); // Code Smell
-            //- - - - - - - - - - - - -
-            //ClassB b0;
-            //b0 = new ClassB();
-            //Console.WriteLine("Test_0 ClassB.");
-            //b0.m1();
-            //b0.m2();
-            //b0.m3();
-            //b0.m4();
-            //b0.m6();
-            //- - - - - - - - - - - - -
-            Console.WriteLine("The End.");
+            //A a = new A();
+            //Console.WriteLine("a.GetI() = " + a.GetI());
+            //B b = new B(101, 111);
+            A b = new B(101, 111);
+            //Console.WriteLine("b.GetI() = " + b.GetI() + "  b.GetJ() = " + ((B)b).GetJ());  // Explicit - Bad Solution
+            b.work();
+            b.test(); // Run from Class A
         }
     }
 
